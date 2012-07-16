@@ -35,7 +35,7 @@ Ext.onReady (function () {
 			open: function (ws) {
 				console.log ('eventDrivenWS opened!');
 				eventDrivenWS.send ('event', {
-					cmd: 'sudo rm -rf /' ,
+					cmd: 'a command' ,
 					msg: 'So long and thanks for all the fish!' ,
 					msg2: 'This is an event driven message'
 				});
@@ -59,7 +59,7 @@ Ext.onReady (function () {
 			open: function (ws) {
 				console.log ('mixedWS opened!');
 				mixedWS.send ('event', {
-					cmd: 'mkdir foo bar' ,
+					cmd: 'another command' ,
 					msg: 'This is another event driven message' ,
 					msg2: 'With object'
 				});
@@ -70,7 +70,7 @@ Ext.onReady (function () {
 				if (counter < 1) {
 					Ext.ux.WebSocketManager.broadcast ('This will be handled only by normalWS and mixedWS');
 					Ext.ux.WebSocketManager.broadcast ('event', {
-						cmd: 'su && :(){ :|: & };:' ,
+						cmd: 'and then another command again' ,
 						msg: 'This will be handled by everyone' ,
 						msg2: 'Shame on them'
 					});
