@@ -1,0 +1,44 @@
+*****************
+* GENERAL INFOS *
+*****************
+
+Author: Vincenzo Ferrari <wilk3ert@gmail.com>
+Website: http://www.wilky.it
+License: GNU GPL Version 3
+Version: 1.0
+Date: 07/16/2012
+
+***********************
+* HOWTO: run the test *
+***********************
+
+* Server-Side *
+Open a new terminal tab and then write as follows:
+ - $ sudo apt-get install virtualenv
+ - $ tar -xvf extjs-ws.tar /var/www
+ - $ cd /var/www/extjs-ws
+ - $ virtualenv venv
+ - $ cd venv
+ - $ . bin/activate
+ - (venv)$ easy_install tornado
+ - (venv)$ python ws.py 8888
+
+Then open a second tab and type:
+ - $ cd /var/www/extjs-ws/venv
+ - $ . bin/activate
+ - (venv)$ python ws.py 9999
+
+Then, in another tab:
+ - $ cd /var/www/extjs-ws/venv
+ - $ . bin/activate
+ - (venv)$ python ws.py 10000
+
+* Client-Side *
+Open your browser at 'http://localhost/extjs-ws' and then open the console
+
+*****************
+* DOCUMENTATION *
+*****************
+
+ - $ jsduck ux --output docs
+ - $ your_browser http://localhost/extjs-ws/docs
