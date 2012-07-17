@@ -45,11 +45,15 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	/**
 	 * @method register
 	 * Registers an Ext.ux.WebSocket
-	 * @param {Ext.ux.WebSocket} websocket The WebSocket to register
+	 * @param {Ext.ux.WebSocket/Ext.ux.WebSocket[]} websockets WebSockets to register. Could be only one.
 	 */
-	register: function (websocket) {
-		if (!Ext.isEmpty (websocket.url)) this.wsList.add (websocket.url, websocket);
-		else Ext.Error.raise ('Url needed!');
+	register: function (websockets) {
+		// Changes websockets into an array in every case
+		if (Ext.isObject (websockets)) websockets = [websockets];
+		
+		for (var i in websockets) {
+			if (!Ext.isEmpty (websockets[i].url)) this.wsList.add (websockets[i].url, websockets[i]);
+		}
 	} ,
 	
 	/**
@@ -86,10 +90,14 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	/**
 	 * @method unregister
 	 * Unregisters an Ext.ux.WebSocket
-	 * @param {Ext.ux.WebSocket} websocket The WebSocket to unregister
+	 * @param {Ext.ux.WebSocket/Ext.ux.WebSocket[]} websockets WebSockets to unregister
 	 */
-	unregister: function (websocket) {
-		if (this.wsList.containsKey (websocket.url)) this.wsList.removeAtKey (websocket.url);
+	unregister: function (websockets) {
+		if (Ext.isObject (websockets)) websockets = [websockets];
+		
+		for (var i in websockets) {
+			if (this.wsList.containsKey (websockets[i].url)) this.wsList.removeAtKey (websockets[i].url);
+		}
 	} ,
 	
 	/**
@@ -115,11 +123,11 @@ Ext.define ('Ext.ux.WebSocketManager', {
 		var me = this;
 		
 		// If there's no websockets to exclude, treats it as broadcast
-		if ((websockets === undefined) or (websockets === null)) {
+		if ((websockets === undefined) || (websockets === null)) {
 			me.broadcast (event, message);
 		}
 		// If it's a single websocket, it's changed as an array
-		else if (Ext.isObject (websockets) websockets[0] = websockets;
+		else if (Ext.isObject (websockets)) websockets = [websockets];
 		
 		if (Ext.isArray (websockets)) {
 			var list = me.wsList;
