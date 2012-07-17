@@ -112,7 +112,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	/**
 	 * @property {Number} OPEN
 	 * @readonly
-	 * Indicates the websocket is opened and connected
+	 * Indicates the websocket is open and connected
 	 */
 	OPEN: 1 ,
 	
@@ -132,7 +132,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		me.addEvents (
 			/**
 			 * @event open
-			 * Fires after websocket has been connected.
+			 * Fires after the websocket has been connected.
 			 * @param {Ext.ux.WebSocket} this The websocket
 			 */
 			'open' ,
@@ -147,7 +147,7 @@ Ext.define ('Ext.ux.WebSocket', {
 			
 			/**
 			 * @event close
-			 * Fires after websocket has been disconnected.
+			 * Fires after the websocket has been disconnected.
 			 * @param {Ext.ux.WebSocket} this The websocket
 			 */
 			'close' ,

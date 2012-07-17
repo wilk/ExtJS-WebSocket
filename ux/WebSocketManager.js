@@ -105,6 +105,37 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	} ,
 	
 	/**
+	 * @method multicast
+	 * Sends a message to each websocket, except those specified
+	 * @param {Ext.ux.WebSocket/Ext.ux.WebSocket[]} websockets An array of websockets to take off the communication
+	 * @param {String} event The event to raise
+	 * @param {String/Object} message The data to send
+	 */
+	multicast: function (websockets, event, message) {
+		var me = this;
+		
+		// If there's no websockets to exclude, treats it as broadcast
+		if ((websockets === undefined) or (websockets === null)) {
+			me.broadcast (event, message);
+		}
+		// If it's a single websocket, it's changed as an array
+		else if (Ext.isObject (websockets) websockets[0] = websockets;
+		
+		if (Ext.isArray (websockets)) {
+			var list = me.wsList;
+			
+			// Exclude websockets from the communication
+			for (var i in websockets) {
+				list.removeAtKey (websockets[i]);
+			}
+			
+			list.each (function (url, websocket, len) {
+				if (websocket.isReady ()) websocket.send (event, message);
+			});
+		}
+	} ,
+	
+	/**
 	 * @method disconnect
 	 * Disconnects a websocket
 	 * @param {Ext.ux.WebSocket.Wrapper} websocket The websocket to disconnect
