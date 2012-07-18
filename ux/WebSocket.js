@@ -238,26 +238,34 @@ Ext.define ('Ext.ux.WebSocket', {
 	/**
 	 * @method send
 	 * Sends data. If there's only the first parameter (event), it sends as normal string, otherwise as a JSON encoded object
-	 * @param {String} event The event to handle by the server
+	 * @param {String/String[]} events Events that have to handled by the server
 	 * @param {String/Object} data The data to send
 	 */
-	send: function (event, data) {
-		var objData;
-		
+	send: function (events, data) {
 		// Treats it as normal message
 		if (arguments.length === 1) {
-			objData = event;
+			if (Ext.isString (events)) this.ws.send (events);
+			else Ext.Error.raise ('String expected!');
 		}
 		// Treats it as event-driven message
 		else if (arguments.length >= 2) {
-			objData = {
-				event: event ,
-				data: data
-			};
+			if (Ext.isString (events)) events = [events];
 			
-			objData = Ext.JSON.encode (objData);
+			var objData = [];
+			var tmp;
+			
+			for (var i in events) {
+				tmp = {
+					event: events[i] ,
+					data: data
+				};
+				
+				objData[i] = Ext.JSON.encode (tmp);
+			}
+			
+			for (var i in objData) {
+				this.ws.send (objData[i]);
+			}
 		}
-		
-		this.ws.send (objData);
 	}
 });
