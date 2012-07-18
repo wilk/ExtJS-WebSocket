@@ -105,23 +105,30 @@ Ext.define ('Ext.ux.WebSocket', {
 	/**
 	 * @property {Number} CONNECTING
 	 * @readonly
-	 * Indicates the websocket is connecting
+	 * The connection is not yet open.
 	 */
 	CONNECTING: 0 ,
 	
 	/**
 	 * @property {Number} OPEN
 	 * @readonly
-	 * Indicates the websocket is open and connected
+	 * The connection is open and ready to communicate.
 	 */
 	OPEN: 1 ,
 	
 	/**
+	 * @property {Number} CLOSING
+	 * @readonly
+	 * The connection is in the process of closing.
+	 */
+	CLOSING: 2 ,
+	
+	/**
 	 * @property {Number} CLOSED
 	 * @readonly
-	 * Indicates the websocket is closed and there's no connection
+	 * The connection is closed or couldn't be opened.
 	 */
-	CLOSED: 2 ,
+	CLOSED: 3 ,
 	
 	constructor: function (cfg) {
 		var me = this;
@@ -221,10 +228,10 @@ Ext.define ('Ext.ux.WebSocket', {
 	} ,
 	
 	/**
-	 * @method disconnect
-	 * Disconnects the websocket
+	 * @method close
+	 * Closes the websocket
 	 */
-	disconnect: function () {
+	close: function () {
 		this.ws.close ();
 	} ,
 	
