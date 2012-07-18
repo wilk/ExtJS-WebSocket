@@ -5,7 +5,7 @@ It has two classes: Ext.ux.WebSocket and Ext.ux.WebSocketManager
 The first is a wrapper for standard HTML5 WebSocket and it provides a lot of interesting and easy-to-use features.
 The second is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket contemporaneously.
 
-## How to use
+## Usage
 Load Ext.ux.WebSocket and Ext.ux.WebSocketManager via Ext.require:
 
 ```javascript
@@ -106,7 +106,7 @@ websocket.on ('stop', function (data) {
 ```
 
 ## Documentation
-You can build the documentation (like ExtJS Docs) with [jsduck][https://github.com/senchalabs/jsduck]
+You can build the documentation (like ExtJS Docs) with jsduck (https://github.com/senchalabs/jsduck):
 
 ```bash
 $ jsduck ux --output /var/www/docs
