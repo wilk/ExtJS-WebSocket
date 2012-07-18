@@ -25,9 +25,18 @@
  *     
  *     Ext.ux.WebSocketManager.register (ws3);
  *     
+ *     Ext.ux.WebSocketManager.listen ('system shutdown', function (ws, data) {
+ *       Ext.Msg.show ({
+ *         title: 'System Shutdown' ,
+ *         msg: data ,
+ *         icon: Ext.Msg.WARNING ,
+ *         buttons: Ext.Msg.OK
+ *       });
+ *     });
+ *     
  *     Ext.ux.WebSocketManager.broadcast ('system shutdown', 'BROADCAST: the system will shutdown in few minutes.');
  *     
- *     Ext.ux.WebSocketManager.disconnectAll ();
+ *     Ext.ux.WebSocketManager.closeAll ();
  *     
  *     Ext.ux.WebSocketManager.unregister (ws1);
  *     Ext.ux.WebSocketManager.unregister (ws2);

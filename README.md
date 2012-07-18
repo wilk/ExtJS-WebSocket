@@ -116,6 +116,47 @@ websocket.on ('stop', function (data) {
 });
 ```
 
+## Ext.ux.WebSocketManager features
+Here's an example of the manager:
+
+```javascript
+var ws1 = Ext.create ('Ext.ux.WebSocket', {
+	url: 'http://localhost:8888'
+});
+
+Ext.ux.WebSocketManager.register (ws1);
+
+var ws2 = Ext.create ('Ext.ux.WebSocket', {
+	url: 'http://localhost:8900'
+});
+
+Ext.ux.WebSocketManager.register (ws2);
+
+var ws3 = Ext.create ('Ext.ux.WebSocket', {
+	url: 'http://localhost:8950'
+});
+
+Ext.ux.WebSocketManager.register (ws3);
+
+Ext.ux.WebSocketManager.listen ('system shutdown', function (ws, data) {
+	Ext.Msg.show ({
+		title: 'System Shutdown' ,
+		msg: data ,
+		icon: Ext.Msg.WARNING ,
+		buttons: Ext.Msg.OK
+	});
+});
+
+// This will handled by everyone
+Ext.ux.WebSocketManager.broadcast ('system shutdown', 'BROADCAST: the system will shutdown in few minutes.');
+
+Ext.ux.WebSocketManager.closeAll ();
+
+Ext.ux.WebSocketManager.unregister (ws1);
+Ext.ux.WebSocketManager.unregister (ws2);
+Ext.ux.WebSocketManager.unregister (ws3);
+```
+
 ## Run the demo
 First of all, you need [**virtualenv**](http://www.virtualenv.org):
 
