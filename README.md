@@ -1,9 +1,9 @@
 # ExtJS-WebSocket
 
 ExtJS-WebSocket is an extension to handle and use the HTML5 WebSocket with ExtJS.
-It has two classes: Ext.ux.WebSocket and Ext.ux.WebSocketManager
-The first is a wrapper for standard HTML5 WebSocket and it provides a lot of interesting and easy-to-use features.
-The second is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket contemporaneously.
+It has two classes: **Ext.ux.WebSocket** and **Ext.ux.WebSocketManager**
+The first one is a wrapper for standard HTML5 WebSocket and it provides a lot of interesting and easy-to-use features.
+The second one is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket in the same time.
 
 ## Usage
 Load Ext.ux.WebSocket and Ext.ux.WebSocketManager via Ext.require:
@@ -16,7 +16,18 @@ Ext.Loader.setConfig ({
 Ext.require (['Ext.ux.WebSocket', 'Ext.ux.WebSocketManager']);
 ```
 
-Now, you are ready to use them in your code!
+Now, you are ready to use them in your code as follows:
+
+```javascript
+// Creating a new instance of Ext.ux.WebSocket
+var ws = Ext.create ('Ext.ux.WebSocket', {
+	url: 'your_url:your_port' ,
+	protocol: 'your_protocol'
+});
+
+// Using Ext.ux.WebSocketManager
+Ext.ux.WebSocketManager.register (ws);
+```
 
 ## Communications supported
 ### Pure text communication
@@ -105,8 +116,37 @@ websocket.on ('stop', function (data) {
 });
 ```
 
+## Run the demo
+First of all, you need [**virtualenv**](http://www.virtualenv.org):
+
+```bash
+$ sudo apt-get install virtualenv
+```
+
+Then, make a virtual environment:
+
+```bash
+$ virtualenv venv
+```
+
+And install Tornado:
+
+```bash
+$ . /venv/bin/activate
+(venv)$ easy_install tornado
+```
+
+Finally, start the server:
+
+```bash
+(venv)$ python /var/www/ExtJS-WebSocket/server.py 8888 9999 10000
+```
+
+Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
+Then, type in the address bar of your browser: *http://localhost/ExtJS-WebSocket*
+
 ## Documentation
-You can build the documentation (like ExtJS Docs) with jsduck (https://github.com/senchalabs/jsduck):
+You can build the documentation (like ExtJS Docs) with [**jsduck**](https://github.com/senchalabs/jsduck):
 
 ```bash
 $ jsduck ux --output /var/www/docs
