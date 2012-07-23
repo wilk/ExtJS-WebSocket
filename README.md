@@ -158,6 +158,8 @@ Ext.ux.WebSocketManager.unregister (ws3);
 ```
 
 ## Run the demo
+**I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
+
 First of all, you need [**virtualenv**](http://www.virtualenv.org):
 
 ```bash
@@ -184,7 +186,7 @@ Finally, start the server:
 ```
 
 Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
-Then, type in the address bar of your browser: *http://localhost/ExtJS-WebSocket*
+Then, type in the address bar of your browser: **http://localhost/ExtJS-WebSocket** and play the demo ;)
 
 ## Documentation
 You can build the documentation (like ExtJS Docs) with [**jsduck**](https://github.com/senchalabs/jsduck):

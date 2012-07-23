@@ -92,15 +92,17 @@ Ext.define ('Ext.ux.WebSocket', {
 		observable: 'Ext.util.Observable'
 	} ,
 	
-	/**
-	 * @cfg {String} url The URL to connect
-	 */
-	url: '' ,
+	config: {
+		/**
+		 * @cfg {String} url The URL to connect
+		 */
+		url: '' ,
 	
-	/**
-	 * @cfg {String} protocol The protocol to use in the connection
-	 */
-	protocol: null ,
+		/**
+		 * @cfg {String} protocol The protocol to use in the connection
+		 */
+		protocol: null ,
+	} ,
 	
 	/**
 	 * @property {Number} CONNECTING
@@ -134,7 +136,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		var me = this;
 		
 		me.initConfig (cfg);
-		me.mixins.observable.constructor.call (this, cfg);
+		me.mixins.observable.constructor.call (me, cfg);
 		
 		me.addEvents (
 			/**
