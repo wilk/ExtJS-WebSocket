@@ -35,7 +35,7 @@ The communication is text-only, without objects or any other kind of data.
 
 ```javascript
 var websocket = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8888' ,
+	url: 'ws://localhost:8888' ,
 	listeners: {
 		open: function (ws) {
 			console.log ('The websocket is ready to use');
@@ -59,7 +59,7 @@ The communication is event-driven: an event and a String or Object are sent and 
 
 ```javascript
 var websocket = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8888' ,
+	url: 'ws://localhost:8888' ,
 	listeners: {
 		open: function (ws) {
 			console.log ('The websocket is ready to use');
@@ -88,7 +88,7 @@ The communication is mixed: it can handles text-only and event-driven communicat
 
 ```javascript
 var websocket = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8888' ,
+	url: 'ws://localhost:8888' ,
 	listeners: {
 		open: function (ws) {
 			console.log ('The websocket is ready to use');
@@ -121,19 +121,19 @@ Here's an example of the manager:
 
 ```javascript
 var ws1 = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8888'
+	url: 'ws://localhost:8888'
 });
 
 Ext.ux.WebSocketManager.register (ws1);
 
 var ws2 = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8900'
+	url: 'ws://localhost:8900'
 });
 
 Ext.ux.WebSocketManager.register (ws2);
 
 var ws3 = Ext.create ('Ext.ux.WebSocket', {
-	url: 'http://localhost:8950'
+	url: 'ws://localhost:8950'
 });
 
 Ext.ux.WebSocketManager.register (ws3);

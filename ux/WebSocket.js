@@ -10,7 +10,7 @@
  * The communication is text-only, without objects or any other kind of data.
  * 
  *     var websocket = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8888' ,
+ *       url: 'ws://localhost:8888' ,
  *       listeners: {
  *         open: function (ws) {
  *           console.log ('The websocket is ready to use');
@@ -32,7 +32,7 @@
  * The communication is event-driven: an event and a String or Object are sent and the websocket handles different events.
  * 
  *     var websocket = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8888' ,
+ *       url: 'ws://localhost:8888' ,
  *       listeners: {
  *         open: function (ws) {
  *           console.log ('The websocket is ready to use');
@@ -59,7 +59,7 @@
  * The communication is mixed: it can handles text-only and event-driven communication.
  * 
  *     var websocket = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8888' ,
+ *       url: 'ws://localhost:8888' ,
  *       listeners: {
  *         open: function (ws) {
  *           console.log ('The websocket is ready to use');
@@ -88,6 +88,8 @@
  */
 
 Ext.define ('Ext.ux.WebSocket', {
+	alias: 'widget.websocket' ,
+	
 	mixins: {
 		observable: 'Ext.util.Observable'
 	} ,
@@ -132,6 +134,19 @@ Ext.define ('Ext.ux.WebSocket', {
 	 */
 	CLOSED: 3 ,
 	
+	/**
+	 * Creates new WebSocket
+	 * @param {Object} config The configuration options may be specified as follows:
+	 * 
+	 *     var config = {
+	 *       url: 'your_url' ,
+	 *       protocol: 'your_protocol'
+	 *     };
+	 *     
+	 *     var ws = Ext.create ('Ext.ux.WebSocket', config);
+	 *
+	 * @return {Ext.ux.WebSocket} An instance of Ext.ux.WebSocket or null if an error occurred.
+	 */
 	constructor: function (cfg) {
 		var me = this;
 		
@@ -206,6 +221,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 		catch (err) {
 			Ext.Error.raise (err);
+			return null;
 		}
 		
 		return me;

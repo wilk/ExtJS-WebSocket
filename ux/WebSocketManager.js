@@ -8,19 +8,19 @@
  * This singleton provide some useful functions to use for many websockets.
  * 
  *     var ws1 = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8888'
+ *       url: 'ws://localhost:8888'
  *     });
  *     
  *     Ext.ux.WebSocketManager.register (ws1);
  *     
  *     var ws2 = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8900'
+ *       url: 'ws://localhost:8900'
  *     });
  *     
  *     Ext.ux.WebSocketManager.register (ws2);
  *     
  *     var ws3 = Ext.create ('Ext.ux.WebSocket', {
- *       url: 'http://localhost:8950'
+ *       url: 'ws://localhost:8950'
  *     });
  *     
  *     Ext.ux.WebSocketManager.register (ws3);
