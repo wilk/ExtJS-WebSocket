@@ -103,7 +103,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		/**
 		 * @cfg {String} protocol The protocol to use in the connection
 		 */
-		protocol: null ,
+		protocol: null 
 	} ,
 	
 	/**
@@ -186,7 +186,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		);
 		
 		try {
-			me.ws = new WebSocket (me.url, me.protocol);
+			me.ws = (me.protocol === null ? new WebSocket (me.url) : new WebSocket (me.url, me.protocol));
 			
 			me.ws.onopen = function (evt) {
 				me.fireEvent ('open', me);
