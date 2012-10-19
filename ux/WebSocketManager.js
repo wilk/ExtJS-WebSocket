@@ -52,12 +52,6 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	wsList: Ext.create ('Ext.util.HashMap') ,
 	
 	/**
-	 * @property {Number} counter Counter of registered websockets
-	 * @readonly
-	 */
-	counter: 0 ,
-	
-	/**
 	 * @method register
 	 * Registers one or more Ext.ux.WebSocket
 	 * @param {Ext.ux.WebSocket/Ext.ux.WebSocket[]} websockets WebSockets to register. Could be only one.
@@ -68,12 +62,9 @@ Ext.define ('Ext.ux.WebSocketManager', {
 		// Changes websockets into an array in every case
 		if (Ext.isObject (websockets)) websockets = [websockets];
 		
-		for (var i in websockets) {
-			if (!Ext.isEmpty (websockets[i].url)) {
-				me.wsList.add (websockets[i].url, websockets[i]);
-				me.counter++;
-			}
-		}
+		Ext.each (websockets, function (websocket) {
+			if (!Ext.isEmpty (websocket.url)) me.wsList.add (websocket.url, websocket);
+		});
 	} ,
 	
 	/**
@@ -117,12 +108,9 @@ Ext.define ('Ext.ux.WebSocketManager', {
 		
 		if (Ext.isObject (websockets)) websockets = [websockets];
 		
-		for (var i in websockets) {
-			if (me.wsList.containsKey (websockets[i].url)) {
-				me.wsList.removeAtKey (websockets[i].url);
-				me.counter--;
-			}
-		}
+		Ext.each (websockets, function (websocket) {
+			if (me.wsList.containsKey (websocket.url)) me.wsList.removeAtKey (websocket.url);
+		});
 	} ,
 	
 	/**
@@ -140,17 +128,13 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	 * Sends a message to each websocket, except those specified
 	 * @param {Ext.ux.WebSocket/Ext.ux.WebSocket[]} websockets An array of websockets to take off the communication
 	 * @param {String} event The event to raise
-	 * @param {String/Object} message The data to send
+	 * @param {String/Object} data The data to send
 	 */
-	multicast: function (websockets, event, message) {
+	multicast: function (websockets, event, data) {
 		this.getExcept(websockets).each (function (url, websocket, len) {
 			if (websocket.isReady ()) {
-				if ((message === undefined) || (message === null)) {
-					websocket.send (event);
-				}
-				else {
-					websocket.send (event, message);
-				}
+				if (Ext.isEmpty (data)) websocket.send (event);
+				else websocket.send (event, data);
 			}
 		});
 	} ,
@@ -165,9 +149,9 @@ Ext.define ('Ext.ux.WebSocketManager', {
 		if (Ext.isString (events)) events = [events];
 		
 		this.wsList.each (function (url, websocket, len) {
-			for (var i in events) {
-				websocket.on (events[i], handler);
-			}
+			Ext.each (events, function (event) {
+				websocket.on (event, handler);
+			});
 		});
 	} ,
 	
@@ -182,9 +166,9 @@ Ext.define ('Ext.ux.WebSocketManager', {
 		if (Ext.isString (events)) events = [events];
 		
 		this.getExcept(websockets).each (function (url, websocket, len) {
-			for (var i in events) {
-				websocket.on (events[i], handler);
-			}
+			Ext.each (events, function (event) {
+				websocket.on (event, handler);
+			});
 		});
 	} ,
 	
@@ -198,28 +182,14 @@ Ext.define ('Ext.ux.WebSocketManager', {
 	getExcept: function (websockets) {
 		if (Ext.isObject (websockets)) websockets = [websockets];
 		
-		var list = this.wsList;
+		var list = this.wsList.clone ();
 			
 		// Exclude websockets from the communication
-		for (var i in websockets) {
-			list.removeAtKey (websockets[i]);
-		}
+		Ext.each (websockets, function (websocket) {
+			list.removeAtKey (websocket.url);
+		});
 		
 		return list;
-	} ,
-	
-	/**
-	 * @method close
-	 * Closes a websocket
-	 * @param {Ext.ux.WebSocket.Wrapper} websocket The websocket to close
-	 */
-	close: function (websocket) {
-		var me = this;
-		
-		if (me.wsList.containsKey (websocket.url)) {
-			me.wsList.get(websocket.url).close ();
-			me.unregister (websocket);
-		}
 	} ,
 	
 	/**

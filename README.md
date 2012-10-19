@@ -1,12 +1,13 @@
 # ExtJS-WebSocket
 
 ExtJS-WebSocket is an extension to handle and use the HTML5 WebSocket with ExtJS.
-It has two classes: **Ext.ux.WebSocket** and **Ext.ux.WebSocketManager**
+
+It has two classes: `Ext.ux.WebSocket` and `Ext.ux.WebSocketManager`<br/>
 The first one is a wrapper for standard HTML5 WebSocket and it provides a lot of interesting and easy-to-use features.
-The second one is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket in the same time.
+The second one is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket at the same time.
 
 ## Usage
-Load Ext.ux.WebSocket and Ext.ux.WebSocketManager via Ext.require:
+Load `Ext.ux.WebSocket` and `Ext.ux.WebSocketManager` via `Ext.require`:
 
 ```javascript
 Ext.Loader.setConfig ({
@@ -147,7 +148,7 @@ Ext.ux.WebSocketManager.listen ('system shutdown', function (ws, data) {
 	});
 });
 
-// This will handled by everyone
+// This will be handled by everyone
 Ext.ux.WebSocketManager.broadcast ('system shutdown', 'BROADCAST: the system will shutdown in few minutes.');
 
 Ext.ux.WebSocketManager.closeAll ();
@@ -172,11 +173,11 @@ Then, make a virtual environment:
 $ virtualenv venv
 ```
 
-And install Tornado:
+And install `Tornado`:
 
 ```bash
 $ . /venv/bin/activate
-(venv)$ easy_install tornado
+(venv)$ pip tornado
 ```
 
 Finally, start the server:

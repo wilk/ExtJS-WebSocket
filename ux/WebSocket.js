@@ -103,7 +103,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		/**
 		 * @cfg {String} protocol The protocol to use in the connection
 		 */
-		protocol: null ,
+		protocol: null
 	} ,
 	
 	/**
@@ -180,13 +180,13 @@ Ext.define ('Ext.ux.WebSocket', {
 			 * @event message
 			 * Fires after a message is arrived from the server.
 			 * @param {Ext.ux.WebSocket} this The websocket
-			 * @param {String} message The message arrived
+			 * @param {String/Object} message The message arrived
 			 */
 			'message'
 		);
 		
 		try {
-			me.ws = new WebSocket (me.url, me.protocol);
+			me.ws = Ext.isEmpty (me.protocol) ? new WebSocket (me.url) : new WebSocket (me.url, me.protocol);
 			
 			me.ws.onopen = function (evt) {
 				me.fireEvent ('open', me);
@@ -202,20 +202,15 @@ Ext.define ('Ext.ux.WebSocket', {
 			
 			// Build the JSON message to display with the right event
 			me.ws.onmessage = function (message) {
-				me.fireEvent ('message', me, message.data);
-				
+				if (Ext.isString (message)) me.fireEvent ('message', me, message.data);
 				/*
 					message.data : JSON encoded message
-					msg.event : event to be raised
-					msg.data : data to be handled
+					msg.event : event to be raise
+					msg.data : data to be handle
 				*/
-				try {
+				else {
 					var msg = Ext.JSON.decode (message.data);
-					
 					me.fireEvent (msg.event, me, msg.data);
-				}
-				catch (err) {
-					// Do nothing if the message arrived can't be decoded
 				}
 			};
 		}
@@ -255,35 +250,30 @@ Ext.define ('Ext.ux.WebSocket', {
 	
 	/**
 	 * @method send
-	 * Sends data. If there's only the first parameter (event), it sends as normal string, otherwise as a JSON encoded object
-	 * @param {String/String[]} events Events that have to handled by the server
+	 * Sends data. If there's only the first parameter (event), it sends it as a normal string, otherwise as a JSON encoded object
+	 * @param {String/String[]} events Events that have to be handled by the server
 	 * @param {String/Object} data The data to send
 	 */
 	send: function (events, data) {
+		var me = this;
+		
 		// Treats it as normal message
 		if (arguments.length === 1) {
-			if (Ext.isString (events)) this.ws.send (events);
+			if (Ext.isString (events)) me.ws.send (events);
 			else Ext.Error.raise ('String expected!');
 		}
 		// Treats it as event-driven message
 		else if (arguments.length >= 2) {
 			if (Ext.isString (events)) events = [events];
 			
-			var objData = [];
-			var tmp;
-			
-			for (var i in events) {
-				tmp = {
-					event: events[i] ,
+			Ext.each (events, function (event) {
+				var msg = {
+					event: event ,
 					data: data
 				};
 				
-				objData[i] = Ext.JSON.encode (tmp);
-			}
-			
-			for (var i in objData) {
-				this.ws.send (objData[i]);
-			}
+				me.ws.send (Ext.JSON.encode (msg));
+			});
 		}
 	}
 });
