@@ -202,13 +202,14 @@ Ext.define ('Ext.ux.WebSocket', {
 			
 			// Build the JSON message to display with the right event
 			me.ws.onmessage = function (message) {
-				if (Ext.isString (message)) me.fireEvent ('message', me, message.data);
+				// Message event is always sent
+				me.fireEvent ('message', me, message.data);
 				/*
 					message.data : JSON encoded message
 					msg.event : event to be raise
 					msg.data : data to be handle
 				*/
-				else {
+				if (Ext.isObject (message)) {
 					var msg = Ext.JSON.decode (message.data);
 					me.fireEvent (msg.event, me, msg.data);
 				}
