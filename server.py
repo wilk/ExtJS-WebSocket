@@ -8,7 +8,7 @@ import sys
 
 class EchoWebSocket (websocket.WebSocketHandler):
 	def open (self):
-		print 'WebSocket opened!'
+		print 'WebSocket open!'
 	
 	def on_message (self, message):
 		self.write_message (message)
