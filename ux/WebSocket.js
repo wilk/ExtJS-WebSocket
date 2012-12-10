@@ -213,6 +213,7 @@ Ext.define ('Ext.ux.WebSocket', {
 					me.fireEvent ('message', me, msg);
 				}
 				catch (err) {
+					if (Ext.isString (message.data)) me.fireEvent (message.data, me, message.data);
 					// Message event is always sent
 					me.fireEvent ('message', me, message.data);
 				}
