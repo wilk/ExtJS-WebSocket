@@ -103,7 +103,12 @@ Ext.define ('Ext.ux.WebSocket', {
 		/**
 		 * @cfg {String} protocol The protocol to use in the connection
 		 */
-		protocol: null
+		protocol: null ,
+		
+		/**
+		 * @cfg {String} communicationType The type of communication. 'both' (default) for event-driven and pure-text communication, 'event' for only event-driven and 'text' for only pure-text.
+		 */
+		communicationType: 'both'
 	} ,
 	
 	/**
@@ -200,24 +205,18 @@ Ext.define ('Ext.ux.WebSocket', {
 				me.fireEvent ('close', me);
 			};
 			
-			// Build the JSON message to display with the right event
-			me.ws.onmessage = function (message) {
-				try {
-					/*
-						message.data : JSON encoded message
-						msg.event : event to be raise
-						msg.data : data to be handle
-					*/
-					var msg = Ext.JSON.decode (message.data);
-					me.fireEvent (msg.event, me, msg.data);
-					me.fireEvent ('message', me, msg);
-				}
-				catch (err) {
-					if (Ext.isString (message.data)) me.fireEvent (message.data, me, message.data);
-					// Message event is always sent
-					me.fireEvent ('message', me, message.data);
-				}
-			};
+			if (me.communicationType == 'both') {
+				me.ws.onmessage = Ext.bind (me.receiveBothMessage, this);
+				me.send = Ext.bind (me.sendBothMessage, this);
+			}
+			else if (me.communicationType == 'event') {
+				me.ws.onmessage = Ext.bind (me.receiveEventMessage, this);
+				me.send = Ext.bind (me.sendEventMessage, this);
+			}
+			else {
+				me.ws.onmessage = Ext.bind (me.textMessage, this);
+				me.send = Ext.bind (me.sendTextMessage, this);
+			}
 		}
 		catch (err) {
 			Ext.Error.raise (err);
@@ -253,32 +252,87 @@ Ext.define ('Ext.ux.WebSocket', {
 		this.ws.close ();
 	} ,
 	
-	/**
-	 * @method send
-	 * Sends data. If there's only the first parameter (event), it sends it as a normal string, otherwise as a JSON encoded object
-	 * @param {String/String[]} events Events that have to be handled by the server
-	 * @param {String/Object} data The data to send
-	 */
-	send: function (events, data) {
+	receiveBothMessage: function (message) {
 		var me = this;
 		
+		try {
+			/*
+				message.data : JSON encoded message
+				msg.event : event to be raise
+				msg.data : data to be handle
+			*/
+			var msg = Ext.JSON.decode (message.data);
+			me.fireEvent (msg.event, me, msg.data);
+			me.fireEvent ('message', me, msg);
+		}
+		catch (err) {
+			if (Ext.isString (message.data)) me.fireEvent (message.data, me, message.data);
+			// Message event is always sent
+			me.fireEvent ('message', me, message.data);
+		}
+	} ,
+	
+	receiveEventMessage: function (message) {
+		var me = this;
+		
+		try {
+			var msg = Ext.JSON.decode (message.data);
+			me.fireEvent (msg.event, me, msg.data);
+			me.fireEvent ('message', me, msg);
+		}
+		catch (err) {
+			Ext.Error.raise (err);
+		}
+	} ,
+	
+	receiveTextMessage: function (message) {
+		var me = this;
+		
+		try {
+			me.fireEvent (message, me, message);
+			// Message event is always sent
+			me.fireEvent ('message', me, message);
+		}
+		catch (err) {
+			Ext.Error.raise (err);
+		}
+	} ,
+	
+	sendBothMessage: function (events, data) {
 		// Treats it as normal message
 		if (arguments.length === 1) {
-			if (Ext.isString (events)) me.ws.send (events);
+			if (Ext.isString (events)) this.ws.send (events);
 			else Ext.Error.raise ('String expected!');
 		}
 		// Treats it as event-driven message
 		else if (arguments.length >= 2) {
-			if (Ext.isString (events)) events = [events];
+			events = Ext.isString (events) ? [events] : events;
 			
-			Ext.each (events, function (event) {
+			for (var i=0; i<events.length; i++) {
 				var msg = {
-					event: event ,
+					event: events[i] ,
 					data: data
 				};
 				
-				me.ws.send (Ext.JSON.encode (msg));
-			});
+				this.ws.send (Ext.JSON.encode (msg));
+			}
 		}
+	} ,
+	
+	sendEventMessage: function (events, data) {
+		events = Ext.isString (events) ? [events] : events;
+		
+		for (var i=0; i<events.length; i++) {
+			var msg = {
+				event: events[i] ,
+				data: data
+			};
+			
+			this.ws.send (Ext.JSON.encode (msg));
+		}
+	} ,
+	
+	sendTextMessage: function (event) {
+		this.ws.send (event);
 	}
 });
