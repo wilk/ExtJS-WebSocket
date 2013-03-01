@@ -1,0 +1,276 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>ExtJS WebSocket</title>
+  <meta name="description" content="Ext.ux.WebSocket is an extension to manage HTML5 WebSocket with ExtJS">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">ExtJS WebSocket</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">Ext.ux.WebSocket is an extension to manage HTML5 WebSocket with ExtJS</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/wilk/ExtJS-WebSocket/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/wilk/ExtJS-WebSocket/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/wilk/ExtJS-WebSocket" class="code">View ExtJS WebSocket on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>ExtJS-WebSocket</h1>
+
+<p>ExtJS-WebSocket is an extension to handle and use the HTML5 WebSocket with ExtJS.</p>
+
+<p>It has two classes: <code>Ext.ux.WebSocket</code> and <code>Ext.ux.WebSocketManager</code><br>
+The first one is a wrapper for standard HTML5 WebSocket and it provides a lot of interesting and easy-to-use features.
+The second one is a singleton to register different Ext.ux.WebSocket and it provides functions to work with every registered websocket at the same time.</p>
+
+<h2>Usage</h2>
+
+<p>Load <code>Ext.ux.WebSocket</code> and <code>Ext.ux.WebSocketManager</code> via <code>Ext.require</code>:</p>
+
+<div class="highlight"><pre><span class="nx">Ext</span><span class="p">.</span><span class="nx">Loader</span><span class="p">.</span><span class="nx">setConfig</span> <span class="p">({</span>
+    <span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">require</span> <span class="p">([</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="s1">'Ext.ux.WebSocketManager'</span><span class="p">]);</span>
+</pre></div>
+
+<p>Now, you are ready to use them in your code as follows:</p>
+
+<div class="highlight"><pre><span class="c1">// Creating a new instance of Ext.ux.WebSocket</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'your_url:your_port'</span> <span class="p">,</span>
+    <span class="nx">protocol</span><span class="o">:</span> <span class="s1">'your_protocol'</span>
+<span class="p">});</span>
+
+<span class="c1">// Using Ext.ux.WebSocketManager</span>
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">register</span> <span class="p">(</span><span class="nx">ws</span><span class="p">);</span>
+</pre></div>
+
+<h2>Communications supported</h2>
+
+<h3>Pure text communication</h3>
+
+<p>The communication is text-only, without objects or any other kind of data.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">websocket</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span> <span class="p">,</span>
+    <span class="nx">listeners</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">open</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is ready to use'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'This is a simple text'</span><span class="p">);</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is closed!'</span><span class="p">);</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">Ext</span><span class="p">.</span><span class="nb">Error</span><span class="p">.</span><span class="nx">raise</span> <span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'A new message is arrived: '</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>Pure event-driven communication</h3>
+
+<p>The communication is event-driven: an event and a String or Object are sent and the websocket handles different events.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">websocket</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span> <span class="p">,</span>
+    <span class="nx">listeners</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">open</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is ready to use'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'init'</span><span class="p">,</span> <span class="s1">'This is a simple text'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'and continue'</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s1">'my'</span><span class="o">:</span> <span class="s1">'data'</span> <span class="p">,</span>
+                <span class="s1">'your'</span><span class="o">:</span> <span class="s1">'data'</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is closed!'</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// A 'stop' event is sent from the server</span>
+<span class="c1">// 'data' has 'cmd' and 'msg' fields</span>
+<span class="nx">websocket</span><span class="p">.</span><span class="nx">on</span> <span class="p">(</span><span class="s1">'stop'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'Command: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">cmd</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'Message: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">msg</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>Mixed communication</h3>
+
+<p>The communication is mixed: it can handles text-only and event-driven communication.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">websocket</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span> <span class="p">,</span>
+    <span class="nx">listeners</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">open</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is ready to use'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'This is only-text message'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'init'</span><span class="p">,</span> <span class="s1">'This is a simple text'</span><span class="p">);</span>
+            <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span> <span class="p">(</span><span class="s1">'and continue'</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s1">'my'</span><span class="o">:</span> <span class="s1">'data'</span> <span class="p">,</span>
+                <span class="s1">'your'</span><span class="o">:</span> <span class="s1">'data'</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'The websocket is closed!'</span><span class="p">);</span>
+        <span class="p">}</span> <span class="p">,</span>
+        <span class="nx">message</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'Text-only message arrived is: '</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// A 'stop' event is sent from the server</span>
+<span class="c1">// 'data' has 'cmd' and 'msg' fields</span>
+<span class="nx">websocket</span><span class="p">.</span><span class="nx">on</span> <span class="p">(</span><span class="s1">'stop'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'Command: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">cmd</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">'Message: '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">msg</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Ext.ux.WebSocketManager features</h2>
+
+<p>Here's an example of the manager:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ws1</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span>
+<span class="p">});</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">register</span> <span class="p">(</span><span class="nx">ws1</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">ws2</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8900'</span>
+<span class="p">});</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">register</span> <span class="p">(</span><span class="nx">ws2</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">ws3</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.ux.WebSocket'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8950'</span>
+<span class="p">});</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">register</span> <span class="p">(</span><span class="nx">ws3</span><span class="p">);</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">listen</span> <span class="p">(</span><span class="s1">'system shutdown'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ws</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Ext</span><span class="p">.</span><span class="nx">Msg</span><span class="p">.</span><span class="nx">show</span> <span class="p">({</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s1">'System Shutdown'</span> <span class="p">,</span>
+        <span class="nx">msg</span><span class="o">:</span> <span class="nx">data</span> <span class="p">,</span>
+        <span class="nx">icon</span><span class="o">:</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">Msg</span><span class="p">.</span><span class="nx">WARNING</span> <span class="p">,</span>
+        <span class="nx">buttons</span><span class="o">:</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">Msg</span><span class="p">.</span><span class="nx">OK</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="c1">// This will be handled by everyone</span>
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">broadcast</span> <span class="p">(</span><span class="s1">'system shutdown'</span><span class="p">,</span> <span class="s1">'BROADCAST: the system will shutdown in few minutes.'</span><span class="p">);</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">closeAll</span> <span class="p">();</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">unregister</span> <span class="p">(</span><span class="nx">ws1</span><span class="p">);</span>
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">unregister</span> <span class="p">(</span><span class="nx">ws2</span><span class="p">);</span>
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">ux</span><span class="p">.</span><span class="nx">WebSocketManager</span><span class="p">.</span><span class="nx">unregister</span> <span class="p">(</span><span class="nx">ws3</span><span class="p">);</span>
+</pre></div>
+
+<h2>Run the demo</h2>
+
+<p><strong>I suggest to use <a href="http://www.virtualenv.org"><strong>virtualenv</strong></a> to test the demo.</strong></p>
+
+<p>First of all, you need <a href="http://www.virtualenv.org"><strong>virtualenv</strong></a>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install virtualenv
+</pre></div>
+
+<p>Then, make a virtual environment:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>virtualenv venv
+</pre></div>
+
+<p>And install <code>Tornado</code>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>. /venv/bin/activate
+<span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span>pip tornado
+</pre></div>
+
+<p>Finally, start the server:</p>
+
+<div class="highlight"><pre><span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span>python /var/www/ExtJS-WebSocket/server.py 8888 9999 10000
+</pre></div>
+
+<p>Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
+Then, type in the address bar of your browser: <strong>http://localhost/ExtJS-WebSocket</strong> and play the demo ;)</p>
+
+<h2>Documentation</h2>
+
+<p>You can build the documentation (like ExtJS Docs) with <a href="https://github.com/senchalabs/jsduck"><strong>jsduck</strong></a>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>jsduck ux --output /var/www/docs
+</pre></div>
+
+<p>It will make the documentation into docs dir and it will be visible at: http://localhost/docs</p>
+
+<h2>License</h2>
+
+<p>(GNU GPLv3)</p>
+
+<p>Copyright (c) 2012 Vincenzo Ferrari <a href="mailto:wilk3ert@gmail.com">wilk3ert@gmail.com</a></p>
+
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/wilk" class="avatar"><img src="https://secure.gravatar.com/avatar/5a4ae49890c55068119f06451cb21a8c?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/wilk">wilk</a> maintains <a href="https://github.com/wilk/ExtJS-WebSocket">ExtJS WebSocket</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/wilk/ExtJS-WebSocket/tarball/master" class="tar">tar</a><a href="https://github.com/wilk/ExtJS-WebSocket/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
