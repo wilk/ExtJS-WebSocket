@@ -155,6 +155,14 @@ Ext.define ('Ext.ux.WebSocket', {
 	constructor: function (cfg) {
 		var me = this;
 		
+		// Allows initialization with string
+		// e.g.: Ext.create ('Ext.ux.WebSocket', 'ws://localhost:8888');
+		if (typeof cfg === 'string') {
+			cfg = {
+				url: cfg
+			};
+		}
+		
 		me.initConfig (cfg);
 		me.mixins.observable.constructor.call (me, cfg);
 		

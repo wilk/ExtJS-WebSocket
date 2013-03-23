@@ -176,8 +176,8 @@ $ virtualenv venv
 And install `Tornado`:
 
 ```bash
-$ . /venv/bin/activate
-(venv)$ pip tornado
+$ . venv/bin/activate
+(venv)$ pip install tornado
 ```
 
 Finally, start the server:
