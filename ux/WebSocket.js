@@ -141,14 +141,18 @@ Ext.define ('Ext.ux.WebSocket', {
 	
 	/**
 	 * Creates new WebSocket
-	 * @param {Object} config The configuration options may be specified as follows:
+	 * @param {String/Object} config The configuration options may be specified as follows:
 	 * 
+	 *     // with a configuration set
 	 *     var config = {
 	 *       url: 'your_url' ,
 	 *       protocol: 'your_protocol'
 	 *     };
 	 *     
 	 *     var ws = Ext.create ('Ext.ux.WebSocket', config);
+	 *     
+	 *     // or with websocket url only
+	 *     var ws = Ext.create ('Ext.ux.WebSocket', 'ws://localhost:30000');
 	 *
 	 * @return {Ext.ux.WebSocket} An instance of Ext.ux.WebSocket or null if an error occurred.
 	 */
@@ -260,6 +264,31 @@ Ext.define ('Ext.ux.WebSocket', {
 		this.ws.close ();
 	} ,
 	
+	/**
+	 * @method send
+	 * Sends a message.
+	 * This method is bind at run-time level because it changes on the websocket initial configuration.
+	 * It supports three kind of communication:
+	 *
+	 *    1. text-only
+	 *      Syntax: ws.send (string);
+	 *      Example: ws.send ('hello world!');
+	 *    2. event-driven
+	 *      Syntax: ws.send (event, string/object);
+	 *      Example 1: ws.send ('greetings', 'hello world!');
+	 *      Example 2: ws.send ('greetings', {text: 'hello world!'});
+	 *    3. hybrid (text and event)
+	 *      It uses both: see examples above
+	 * @param {String/Object} message Can be a single text message or an association of event/message.
+	 */
+	send: function () {} ,
+	
+	/**
+	 * @method receiveBothMessage
+	 * It catches every event-driven and pure text messages incoming from the server
+	 * @param {Object} message Message incoming from the server
+	 * @private
+	 */
 	receiveBothMessage: function (message) {
 		var me = this;
 		
@@ -280,6 +309,12 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 	} ,
 	
+	/**
+	 * @method receiveEventMessage
+	 * It catches every event-driven messages incoming from the server
+	 * @param {Object} message Message incoming from the server
+	 * @private
+	 */
 	receiveEventMessage: function (message) {
 		var me = this;
 		
@@ -293,6 +328,12 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 	} ,
 	
+	/**
+	 * @method receiveTextMessage
+	 * It catches every pure text messages incoming from the server
+	 * @param {Object} message Message incoming from the server
+	 * @private
+	 */
 	receiveTextMessage: function (message) {
 		var me = this;
 		
@@ -306,6 +347,13 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 	} ,
 	
+	/**
+	 * @method sendBothMessage
+	 * It sends both pure text and event-driven messages to the server
+	 * @param {String/String[]} events Message(s) or event(s) to send to the server
+	 * @param {String/Object} data Message to send to the server, associated to its event
+	 * @private
+	 */
 	sendBothMessage: function (events, data) {
 		// Treats it as normal message
 		if (arguments.length === 1) {
@@ -327,6 +375,13 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 	} ,
 	
+	/**
+	 * @method sendEventMessage
+	 * It sends event-driven messages to the server
+	 * @param {String/String[]} events Event(s) to send to the server
+	 * @param {String/Object} data Message to send to the server, associated to its event(s)
+	 * @private
+	 */
 	sendEventMessage: function (events, data) {
 		events = Ext.isString (events) ? [events] : events;
 		
@@ -340,6 +395,12 @@ Ext.define ('Ext.ux.WebSocket', {
 		}
 	} ,
 	
+	/**
+	 * @method sendTextMessage
+	 * It sends pure text messages to the server
+	 * @param {String} event Message to send to the server
+	 * @private
+	 */
 	sendTextMessage: function (event) {
 		this.ws.send (event);
 	}
