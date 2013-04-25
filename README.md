@@ -183,11 +183,11 @@ $ . venv/bin/activate
 Finally, start the server:
 
 ```bash
-(venv)$ python /var/www/ExtJS-WebSocket/server.py 8888 9999 10000
+(venv)$ python /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
 ```
 
 Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
-Then, type in the address bar of your browser: **http://localhost/ExtJS-WebSocket** and play the demo ;)
+Then, type in the address bar of your browser: **http://localhost/ExtJS-WebSocket/demo** and play the demo ;)
 
 ## Documentation
 You can build the documentation (like ExtJS Docs) with [**jsduck**](https://github.com/senchalabs/jsduck):
