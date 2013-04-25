@@ -96,7 +96,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	
 	config: {
 		/**
-		 * @cfg {String} url The URL to connect
+		 * @cfg {String} url (required) The URL to connect
 		 */
 		url: '' ,
 	
@@ -159,6 +159,12 @@ Ext.define ('Ext.ux.WebSocket', {
 	constructor: function (cfg) {
 		var me = this;
 		
+		// Raises an error if no url is given
+		if (Ext.isEmpty (cfg)) {
+			Ext.Error.raise ('URL for the websocket is required!');
+			return null;
+		}
+		
 		// Allows initialization with string
 		// e.g.: Ext.create ('Ext.ux.WebSocket', 'ws://localhost:8888');
 		if (typeof cfg === 'string') {
@@ -203,7 +209,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		);
 		
 		try {
-			me.ws = Ext.isEmpty (me.protocol) ? new WebSocket (me.url) : new WebSocket (me.url, me.protocol);
+			me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
 			
 			me.ws.onopen = function (evt) {
 				me.fireEvent ('open', me);
