@@ -108,7 +108,17 @@ Ext.define ('Ext.ux.WebSocket', {
 		/**
 		 * @cfg {String} communicationType The type of communication. 'both' (default) for event-driven and pure-text communication, 'event' for only event-driven and 'text' for only pure-text.
 		 */
-		communicationType: 'both'
+		communicationType: 'both' ,
+		
+		/**
+		 * @cfg {Boolean} autoReconnect If the connection is closed by the server, it tries to re-connect again. The execution interval time of this operation is specified in autoReconnectInterval
+		 */
+		autoReconnect: true ,
+		
+		/**
+		 * @cfg {Int} autoReconnectInterval Execution time slice of the autoReconnect operation, specified in milliseconds.
+		 */
+		autoReconnectInterval: 5000
 	} ,
 	
 	/**
@@ -235,6 +245,20 @@ Ext.define ('Ext.ux.WebSocket', {
 				me.ws.onmessage = Ext.bind (me.textMessage, this);
 				me.send = Ext.bind (me.sendTextMessage, this);
 			}
+			
+			// Setups the auto reconnect task
+			if (me.autoReconnect && me.autoReconnect === true) {
+				me.autoReconnectTask = Ext.TaskManager.start ({
+					run: function () {
+						// It reconnects only if it's disconnected
+						if (me.getStatus () == me.CLOSED) {
+							// TODO: it doesn't keep listeners attached on the websocket
+							me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
+						}
+					} ,
+					interval: me.autoReconnectInterval
+				});
+			}
 		}
 		catch (err) {
 			Ext.Error.raise (err);
@@ -267,7 +291,12 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * Closes the websocket
 	 */
 	close: function () {
-		this.ws.close ();
+		var me = this;
+		
+		me.autoReconnectTask.destroy ();
+		me.ws.close ();
+		
+		return me;
 	} ,
 	
 	/**
@@ -379,6 +408,8 @@ Ext.define ('Ext.ux.WebSocket', {
 				this.ws.send (Ext.JSON.encode (msg));
 			}
 		}
+		
+		return this;
 	} ,
 	
 	/**
@@ -399,6 +430,8 @@ Ext.define ('Ext.ux.WebSocket', {
 			
 			this.ws.send (Ext.JSON.encode (msg));
 		}
+		
+		return this;
 	} ,
 	
 	/**
@@ -409,5 +442,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	 */
 	sendTextMessage: function (event) {
 		this.ws.send (event);
+		
+		return this;
 	}
 });
