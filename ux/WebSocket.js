@@ -219,44 +219,19 @@ Ext.define ('Ext.ux.WebSocket', {
 		);
 		
 		try {
-			me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
-			
-			me.ws.onopen = function (evt) {
-				me.fireEvent ('open', me);
-			};
-			
-			me.ws.onerror = function (error) {
-				me.fireEvent ('error', me, error);
-			};
-			
-			me.ws.onclose = function (evt) {
-				me.fireEvent ('close', me);
-			};
-			
-			if (me.communicationType == 'both') {
-				me.ws.onmessage = Ext.bind (me.receiveBothMessage, this);
-				me.send = Ext.bind (me.sendBothMessage, this);
-			}
-			else if (me.communicationType == 'event') {
-				me.ws.onmessage = Ext.bind (me.receiveEventMessage, this);
-				me.send = Ext.bind (me.sendEventMessage, this);
-			}
-			else {
-				me.ws.onmessage = Ext.bind (me.textMessage, this);
-				me.send = Ext.bind (me.sendTextMessage, this);
-			}
+			// Initializes internal websocket
+			me.initWebsocket ();
 			
 			// Setups the auto reconnect task
-			if (me.autoReconnect && me.autoReconnect === true) {
+			if (me.getAutoReconnect ()) {
 				me.autoReconnectTask = Ext.TaskManager.start ({
 					run: function () {
 						// It reconnects only if it's disconnected
 						if (me.getStatus () == me.CLOSED) {
-							// TODO: it doesn't keep listeners attached on the websocket
-							me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
+							me.initWebsocket ();
 						}
 					} ,
-					interval: me.autoReconnectInterval
+					interval: me.getAutoReconnectInterval ()
 				});
 			}
 		}
@@ -317,6 +292,42 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * @param {String/Object} message Can be a single text message or an association of event/message.
 	 */
 	send: function () {} ,
+	
+	/**
+	 * @method initWebsocket
+	 * Internal websocket initialization
+	 * @private
+	 */
+	initWebsocket: function () {
+		var me = this;
+		
+		me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
+			
+		me.ws.onopen = function (evt) {
+			me.fireEvent ('open', me);
+		};
+		
+		me.ws.onerror = function (error) {
+			me.fireEvent ('error', me, error);
+		};
+		
+		me.ws.onclose = function (evt) {
+			me.fireEvent ('close', me);
+		};
+		
+		if (me.communicationType == 'both') {
+			me.ws.onmessage = Ext.bind (me.receiveBothMessage, this);
+			me.send = Ext.bind (me.sendBothMessage, this);
+		}
+		else if (me.communicationType == 'event') {
+			me.ws.onmessage = Ext.bind (me.receiveEventMessage, this);
+			me.send = Ext.bind (me.sendEventMessage, this);
+		}
+		else {
+			me.ws.onmessage = Ext.bind (me.textMessage, this);
+			me.send = Ext.bind (me.sendTextMessage, this);
+		}
+	} ,
 	
 	/**
 	 * @method receiveBothMessage
