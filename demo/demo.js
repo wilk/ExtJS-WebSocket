@@ -21,7 +21,7 @@ Ext.define ('DEMO.view.OpenConnection', {
 			url: url ,
 			listeners: {
 				open: function (ws) {
-					Ext.get(ws.url).dom.innerHTML += '> WebSocket just open!<br/>';
+					if (Ext.get(ws.url)) Ext.get(ws.url).dom.innerHTML += '> WebSocket just open!<br/>';
 				} ,
 				message: function (ws, data) {
 					Ext.get(ws.url).dom.innerHTML += '> ' + data + '<br/>';
