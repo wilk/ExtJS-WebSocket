@@ -94,6 +94,8 @@ Ext.define ('Ext.ux.WebSocket', {
 		observable: 'Ext.util.Observable'
 	} ,
 	
+	requires: ['Ext.util.TaskManager'] ,
+	
 	config: {
 		/**
 		 * @cfg {String} url (required) The URL to connect
@@ -221,19 +223,6 @@ Ext.define ('Ext.ux.WebSocket', {
 		try {
 			// Initializes internal websocket
 			me.initWebsocket ();
-			
-			// Setups the auto reconnect task
-			if (me.getAutoReconnect ()) {
-				me.autoReconnectTask = Ext.TaskManager.start ({
-					run: function () {
-						// It reconnects only if it's disconnected
-						if (me.getStatus () == me.CLOSED) {
-							me.initWebsocket ();
-						}
-					} ,
-					interval: me.getAutoReconnectInterval ()
-				});
-			}
 		}
 		catch (err) {
 			Ext.Error.raise (err);
@@ -263,12 +252,15 @@ Ext.define ('Ext.ux.WebSocket', {
 	
 	/**
 	 * @method close
-	 * Closes the websocket
+	 * Closes the websocket and kills the autoreconnect task, if exists
 	 */
 	close: function () {
 		var me = this;
 		
-		me.autoReconnectTask.destroy ();
+		if (me.autoReconnectTask) {
+			Ext.TaskManager.stop (me.autoReconnectTask);
+			delete me.autoReconnectTask;
+		}
 		me.ws.close ();
 		
 		return me;
@@ -304,6 +296,13 @@ Ext.define ('Ext.ux.WebSocket', {
 		me.ws = Ext.isEmpty (me.getProtocol ()) ? new WebSocket (me.getUrl ()) : new WebSocket (me.getUrl (), me.getProtocol ());
 			
 		me.ws.onopen = function (evt) {
+			// Kills the auto reconnect task
+			// It will reactivated at the next onclose event
+			if (me.autoReconnectTask) {
+				Ext.TaskManager.stop (me.autoReconnectTask);
+				delete me.autoReconnectTask;
+			}
+			
 			me.fireEvent ('open', me);
 		};
 		
@@ -313,6 +312,19 @@ Ext.define ('Ext.ux.WebSocket', {
 		
 		me.ws.onclose = function (evt) {
 			me.fireEvent ('close', me);
+			
+			// Setups the auto reconnect task, just one
+			if (me.getAutoReconnect () && (typeof me.autoReconnectTask === 'undefined')) {
+				me.autoReconnectTask = Ext.TaskManager.start ({
+					run: function () {
+						// It reconnects only if it's disconnected
+						if (me.getStatus () == me.CLOSED) {
+							me.initWebsocket ();
+						}
+					} ,
+					interval: me.getAutoReconnectInterval ()
+				});
+			}
 		};
 		
 		if (me.communicationType == 'both') {
