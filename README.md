@@ -159,6 +159,7 @@ Ext.ux.WebSocketManager.unregister (ws3);
 ```
 
 ## Run the demo
+### Python 2.7+
 **I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
 
 First of all, you need [**virtualenv**](http://www.virtualenv.org):
@@ -184,6 +185,19 @@ Finally, start the server:
 
 ```bash
 (venv)$ python /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
+```
+
+### Python 3+
+First of all, install `Tornado`:
+
+```bash
+$ sudo apt-get install python3-tornado
+```
+
+Then, start the server:
+
+```bash
+$ python3.3 /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
 ```
 
 Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
