@@ -159,7 +159,7 @@ Ext.ux.WebSocketManager.unregister (ws3);
 ```
 
 ## Run the demo
-### Python 2.7+
+### Python 2.7
 **I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
 
 First of all, you need [**virtualenv**](http://www.virtualenv.org):
@@ -187,7 +187,7 @@ Finally, start the server:
 (venv)$ python /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
 ```
 
-### Python 3+
+### Python 3.3
 First of all, install `Tornado`:
 
 ```bash
