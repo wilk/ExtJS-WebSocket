@@ -8,20 +8,20 @@ import sys
 
 class EchoWebSocket (websocket.WebSocketHandler):
 	def open (self):
-		print 'WebSocket open!'
+		print ('WebSocket open!')
 	
 	def on_message (self, message):
 		self.write_message (message)
-		print 'He sais: ' + message
+		print ('He sais: ' + message)
 	
 	def on_close (self):
-		print 'WebSocket closed'
+		print ('WebSocket closed')
 
 if __name__ == '__main__':
 	if (len (sys.argv) <= 1):
-		print 'Usage: $ python server.py <port1> <port2> <port3> ...'
-		print 'Example: $ python server.py 8888 9999 10000'
-		print 'Exit'
+		print ('Usage: $ python server.py <port1> <port2> <port3> ...')
+		print ('Example: $ python server.py 8888 9999 10000')
+		print ('Exit')
 	else:
 		app = [0]
 		
@@ -30,6 +30,6 @@ if __name__ == '__main__':
 		[app[i].listen (int (sys.argv[i])) for i in range (1, len (sys.argv))]
 		
 		for i in range (1, len (sys.argv)):
-			print 'Server listening at %d' % int (sys.argv[i])
+			print ('Server listening at %d' % int (sys.argv[i]))
 		
 		ioloop.IOLoop.instance().start ()
