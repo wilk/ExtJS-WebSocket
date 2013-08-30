@@ -327,11 +327,11 @@ Ext.define ('Ext.ux.WebSocket', {
 			}
 		};
 		
-		if (me.communicationType == 'both') {
+		if (me.getCommunicationType () == 'both') {
 			me.ws.onmessage = Ext.bind (me.receiveBothMessage, this);
 			me.send = Ext.bind (me.sendBothMessage, this);
 		}
-		else if (me.communicationType == 'event') {
+		else if (me.getCommunicationType () == 'event') {
 			me.ws.onmessage = Ext.bind (me.receiveEventMessage, this);
 			me.send = Ext.bind (me.sendEventMessage, this);
 		}
