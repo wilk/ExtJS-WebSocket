@@ -336,7 +336,7 @@ Ext.define ('Ext.ux.WebSocket', {
 			me.send = Ext.bind (me.sendEventMessage, this);
 		}
 		else {
-			me.ws.onmessage = Ext.bind (me.textMessage, this);
+			me.ws.onmessage = Ext.bind (me.receiveTextMessage, this);
 			me.send = Ext.bind (me.sendTextMessage, this);
 		}
 	} ,
