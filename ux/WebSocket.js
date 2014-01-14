@@ -468,12 +468,11 @@ Ext.define ('Ext.ux.WebSocket', {
                         };
                         if (me.isReady() != true) {
                                 // Setup an auto retry task
-                                console.log('Ext.ux.WebSocket : socket not open!');
                                 me.autoRetryTask = Ext.TaskManager.start ({
                                         run: function (count) {
-                                                console.log('Ext.ux.WebSocket : count', count);
                                                 if (me.getStatus () == me.OPEN) {
                                                         me.ws.send (Ext.JSON.encode (msg));
+                                                        Ext.TaskManager.stop(me.autoRetryTask);
                                                 }
                                         } ,
                                         interval: 1000,
