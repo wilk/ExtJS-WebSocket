@@ -413,6 +413,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * @private
 	 */
 	sendBothMessage: function (events, data) {
+                var me = this;
 		// Treats it as normal message
 		if (arguments.length === 1) {
 			if (Ext.isString (events)) this.ws.send (events);
@@ -428,11 +429,25 @@ Ext.define ('Ext.ux.WebSocket', {
 					data: data
 				};
 				
-				this.ws.send (Ext.JSON.encode (msg));
-			}
-		}
-		
-		return this;
+                                if (me.isReady() != true) {
+                                    // Setup an auto retry task
+                                    console.log('Ext.ux.WebSocket : socket not open!');
+                                    me.autoRetryTask = Ext.TaskManager.start ({
+                                        run: function (count) {
+                                                console.log('Ext.ux.WebSocket : count', count);
+                                                if (me.getStatus () == me.OPEN) {
+                                                        me.ws.send (Ext.JSON.encode (msg));
+                                                }
+                                        } ,
+                                        interval: 1000,
+                                        repeat: 5
+                                    });
+                                } else {
+                                    me.ws.send (Ext.JSON.encode (msg));
+				}
+                      } 
+                }
+                return me;
 	} ,
 	
 	/**
@@ -442,21 +457,33 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * @param {String/Object} data Message to send to the server, associated to its event(s)
 	 * @private
 	 */
-	sendEventMessage: function (events, data) {
-		events = Ext.isString (events) ? [events] : events;
-		
-		for (var i=0; i<events.length; i++) {
-			var msg = {
-				event: events[i] ,
-				data: data
-			};
-			
-			this.ws.send (Ext.JSON.encode (msg));
-		}
-		
-		return this;
-	} ,
-	
+        sendEventMessage: function (events, data) {
+                var me = this;
+                events = Ext.isString (events) ? [events] : events;
+
+                for (var i=0; i<events.length; i++) {
+                        var msg = {
+                                event: events[i] ,
+                                data: data
+                        };
+                        if (me.isReady() != true) {
+                                // Setup an auto retry task
+                                me.autoRetryTask = Ext.TaskManager.start ({
+                                        run: function (count) {
+                                                if (me.getStatus () == me.OPEN) {
+                                                        me.ws.send (Ext.JSON.encode (msg));
+                                                        Ext.TaskManager.stop(me.autoRetryTask);
+                                                }
+                                        } ,
+                                        interval: 1000,
+                                        repeat: 5
+                                });
+                        } else {
+                                me.ws.send (Ext.JSON.encode (msg));
+                        }
+                }
+                return me;
+        } ,
 	/**
 	 * @method sendTextMessage
 	 * It sends pure text messages to the server
@@ -464,8 +491,23 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * @private
 	 */
 	sendTextMessage: function (event) {
-		this.ws.send (event);
-		
-		return this;
+                var me = this;
+                if (me.isReady() != true) {
+                    // Setup an auto retry task
+                    console.log('Ext.ux.WebSocket : socket not open!');
+                    me.autoRetryTask = Ext.TaskManager.start ({
+                           run: function (count) {
+                                   console.log('Ext.ux.WebSocket : count', count);
+                                   if (me.getStatus () == me.OPEN) {
+                                             me.ws.send (Ext.JSON.encode (msg));
+                                   }
+                            } ,
+                            interval: 1000,
+                            repeat: 5
+                     });
+                 } else {
+                     me.ws.send (Ext.JSON.encode (msg));
+                 }
+                 return me;
 	}
 });
