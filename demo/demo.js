@@ -1,7 +1,8 @@
 Ext.Loader.setConfig ({
 	enabled: true,
 	paths: {
-		'Ext.ux': '../ux'
+		'Ext.ux.WebSocket': '../WebSocket.js' ,
+		'Ext.ux.WebSocketManager': '../WebSocketManager.js'
 	}
 });
 
