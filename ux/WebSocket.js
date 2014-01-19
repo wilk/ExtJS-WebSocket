@@ -238,7 +238,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * @return {Boolean} True if the connection is up, False otherwise
 	 */
 	isReady: function () {
-		return (this.getStatus () === this.OPEN ? true : false);
+		return this.getStatus () === this.OPEN;
 	} ,
 	
 	/**
@@ -297,7 +297,7 @@ Ext.define ('Ext.ux.WebSocket', {
 			
 		me.ws.onopen = function (evt) {
 			// Kills the auto reconnect task
-			// It will reactivated at the next onclose event
+			// It will be reactivated at the next onclose event
 			if (me.autoReconnectTask) {
 				Ext.TaskManager.stop (me.autoReconnectTask);
 				delete me.autoReconnectTask;
