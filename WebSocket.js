@@ -318,7 +318,7 @@ Ext.define ('Ext.ux.WebSocket', {
 				me.autoReconnectTask = Ext.TaskManager.start ({
 					run: function () {
 						// It reconnects only if it's disconnected
-						if (me.getStatus () == me.CLOSED) {
+						if (me.getStatus () === me.CLOSED) {
 							me.initWebsocket ();
 						}
 					} ,
@@ -327,11 +327,11 @@ Ext.define ('Ext.ux.WebSocket', {
 			}
 		};
 		
-		if (me.getCommunicationType () == 'both') {
+		if (me.getCommunicationType () === 'both') {
 			me.ws.onmessage = Ext.bind (me.receiveBothMessage, this);
 			me.send = Ext.bind (me.sendBothMessage, this);
 		}
-		else if (me.getCommunicationType () == 'event') {
+		else if (me.getCommunicationType () === 'event') {
 			me.ws.onmessage = Ext.bind (me.receiveEventMessage, this);
 			me.send = Ext.bind (me.sendEventMessage, this);
 		}
