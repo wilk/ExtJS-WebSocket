@@ -1,0 +1,31 @@
+{
+  "name": "Ext.ux.WebSocket",
+  "version": "0.0.0",
+  "description": "Ext.ux.WebSocket is an extension to manage HTML5 WebSocket with ExtJS and SenchaTouch",
+  "main": "WebSocket.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wilk/ExtJS-WebSocket.git"
+  },
+  "keywords": [
+    "extjs",
+    "senchatouch",
+    "websocket",
+    "html5"
+  ],
+  "author": "Vincenzo <wilk3ert@gmail.com> (Wilk)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wilk/ExtJS-WebSocket/issues"
+  },
+  "homepage": "https://github.com/wilk/ExtJS-WebSocket",
+  "dependencies": {
+    "grunt-contrib-jshint": "~0.8.0",
+    "load-grunt-tasks": "~0.2.1",
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.3.0"
+  }
+}
