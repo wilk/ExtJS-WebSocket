@@ -120,7 +120,12 @@ Ext.define ('Ext.ux.WebSocket', {
 		/**
 		 * @cfg {Int} autoReconnectInterval Execution time slice of the autoReconnect operation, specified in milliseconds.
 		 */
-		autoReconnectInterval: 5000
+		autoReconnectInterval: 5000 ,
+
+        /**
+         * @cfg {Boolean} lazyConnection Connect the websocket after the initialization with the open method
+         */
+        lazyConnection: false
 	} ,
 	
 	/**
@@ -150,6 +155,13 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * The connection is closed or couldn't be opened.
 	 */
 	CLOSED: 3 ,
+
+    /**
+     * @property {Object} memento
+     * @private
+     * Internal memento
+     */
+    memento: {} ,
 	
 	/**
 	 * Creates new WebSocket
@@ -184,7 +196,7 @@ Ext.define ('Ext.ux.WebSocket', {
 				url: cfg
 			};
 		}
-		
+
 		me.initConfig (cfg);
 		me.mixins.observable.constructor.call (me, cfg);
 		
@@ -221,8 +233,11 @@ Ext.define ('Ext.ux.WebSocket', {
 		);
 		
 		try {
-			// Initializes internal websocket
-			me.initWebsocket ();
+            // Initializes internal websocket
+            if (!me.getLazyConnection ()) me.initWebsocket ();
+
+            me.memento = Ext.create ('Ext.util.Memento');
+            me.memento.capture ('autoReconnect', me);
 		}
 		catch (err) {
 			Ext.Error.raise (err);
@@ -261,10 +276,27 @@ Ext.define ('Ext.ux.WebSocket', {
 			Ext.TaskManager.stop (me.autoReconnectTask);
 			delete me.autoReconnectTask;
 		}
+        // Deactivate autoReconnect until the websocket is open again
+        me.setAutoReconnect (false);
+
 		me.ws.close ();
 		
 		return me;
 	} ,
+
+    /**
+     * @method close
+     * Re/Open the websocket
+     */
+    open: function () {
+        var me = this;
+
+        // Restore autoReconnect initial value
+        me.memento.restore ('autoReconnect', false, me);
+        me.initWebsocket ();
+
+        return me;
+    } ,
 	
 	/**
 	 * @method send
