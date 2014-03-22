@@ -94,7 +94,7 @@ Ext.define ('Ext.ux.WebSocket', {
 		observable: 'Ext.util.Observable'
 	} ,
 	
-	requires: ['Ext.util.TaskManager'] ,
+	requires: ['Ext.util.TaskManager', 'Ext.util.Memento'] ,
 	
 	config: {
 		/**
