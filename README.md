@@ -189,48 +189,21 @@ Ext.ux.WebSocketManager.unregister (ws3);
 ```
 
 ## Run the demo
-### Python 2.7
-**I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
+First of all, you need [**NodeJS**](http://nodejs.org/) and [**NPM**](https://www.npmjs.org/).
 
-First of all, you need [**virtualenv**](http://www.virtualenv.org):
-
-```bash
-$ sudo apt-get install virtualenv
-```
-
-Then, make a virtual environment:
+Then, install every dependencies:
 
 ```bash
-$ virtualenv venv
+$ npm install
 ```
 
-And install `Tornado`:
+Open a websocket for each port you want:
 
 ```bash
-$ . venv/bin/activate
-(venv)$ pip install tornado
+$ node demo/server.js 9001 9002 9003
 ```
 
-Finally, start the server:
-
-```bash
-(venv)$ python /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
-```
-
-### Python 3.3
-First of all, install `Tornado`:
-
-```bash
-$ sudo apt-get install python3-tornado
-```
-
-Then, start the server:
-
-```bash
-$ python3.3 /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
-```
-
-Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
+Now, you have three websockets listening at 9001, 9002 and 9003 port on the server side!
 Then, type in the address bar of your browser: **http://localhost/ExtJS-WebSocket/demo** and play the demo ;)
 
 ## Documentation

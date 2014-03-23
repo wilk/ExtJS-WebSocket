@@ -22,10 +22,11 @@
     "url": "https://github.com/wilk/ExtJS-WebSocket/issues"
   },
   "homepage": "https://github.com/wilk/ExtJS-WebSocket",
-  "dependencies": {
+  "devDependencies": {
     "grunt-contrib-jshint": "~0.8.0",
     "load-grunt-tasks": "~0.2.1",
     "grunt": "~0.4.2",
-    "grunt-contrib-uglify": "~0.3.0"
+    "grunt-contrib-uglify": "~0.3.0",
+    "ws": "~0.4.31"
   }
 }
