@@ -1,6 +1,6 @@
 {
   "name": "Ext.ux.WebSocket",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/wilk/ExtJS-WebSocket",
   "authors": [
     "Vincenzo (Wilk) Ferrari <wilk3ert@gmail.com>"
