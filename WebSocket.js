@@ -125,7 +125,12 @@ Ext.define ('Ext.ux.WebSocket', {
         /**
          * @cfg {Boolean} lazyConnection Connect the websocket after the initialization with the open method
          */
-        lazyConnection: false
+        lazyConnection: false ,
+
+        /**
+         * @cfg {Boolean} keepUnsentMessages Keep unsent messages and try to send them back after the connection is open again
+         */
+        keepUnsentMessages: false
 	} ,
 	
 	/**
@@ -162,6 +167,13 @@ Ext.define ('Ext.ux.WebSocket', {
      * Internal memento
      */
     memento: {} ,
+
+    /**
+     * @property {Array} memento
+     * @private
+     * Internal queue of unsent messages
+     */
+    messageQueue: [] ,
 	
 	/**
 	 * Creates new WebSocket
@@ -268,6 +280,7 @@ Ext.define ('Ext.ux.WebSocket', {
 	/**
 	 * @method close
 	 * Closes the websocket and kills the autoreconnect task, if exists
+     * @return {Ext.ux.WebSocket} The websocket
 	 */
 	close: function () {
 		var me = this;
@@ -285,8 +298,9 @@ Ext.define ('Ext.ux.WebSocket', {
 	} ,
 
     /**
-     * @method close
+     * @method open
      * Re/Open the websocket
+     * @return {Ext.ux.WebSocket} The websocket
      */
     open: function () {
         var me = this;
@@ -334,6 +348,15 @@ Ext.define ('Ext.ux.WebSocket', {
 				Ext.TaskManager.stop (me.autoReconnectTask);
 				delete me.autoReconnectTask;
 			}
+
+            // Flush unset messages
+            if (me.getKeepUnsentMessages () && me.messageQueue.length > 0) {
+                while (me.messageQueue.length > 0) {
+                    // Avoid infinite loop into safeSend method
+                    if (me.isReady ()) me.safeSend (me.messageQueue.shift ());
+                    else break;
+                }
+            }
 			
 			me.fireEvent ('open', me);
 		};
@@ -372,6 +395,23 @@ Ext.define ('Ext.ux.WebSocket', {
 			me.send = Ext.bind (me.sendTextMessage, this);
 		}
 	} ,
+
+    /**
+     * @method flush
+     * It sends every message given to the websocket, checking first if is there any connection
+     * If there's no connection, it enqueues the message and flushes it later
+     * @param {String} Data to send
+     * @return {Ext.ux.WebSocket} The websocket
+     * @private
+     */
+    safeSend: function (data) {
+        var me = this;
+
+        if (me.isReady ()) me.ws.send (data);
+        else if (me.getKeepUnsentMessages ()) me.messageQueue.push (data);
+
+        return me;
+    } ,
 	
 	/**
 	 * @method receiveBothMessage
@@ -442,12 +482,15 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * It sends both pure text and event-driven messages to the server
 	 * @param {String/String[]} events Message(s) or event(s) to send to the server
 	 * @param {String/Object} data Message to send to the server, associated to its event
+     * @return {Ext.ux.WebSocket} The websocket
 	 * @private
 	 */
 	sendBothMessage: function (events, data) {
+        var me = this;
+
 		// Treats it as normal message
 		if (arguments.length === 1) {
-			if (Ext.isString (events)) this.ws.send (events);
+			if (Ext.isString (events)) me.safeSend (events);
 			else Ext.Error.raise ('String expected!');
 		}
 		// Treats it as event-driven message
@@ -459,12 +502,12 @@ Ext.define ('Ext.ux.WebSocket', {
 					event: events[i] ,
 					data: data
 				};
-				
-				this.ws.send (Ext.JSON.encode (msg));
+
+                me.safeSend (Ext.JSON.encode (msg));
 			}
 		}
 		
-		return this;
+		return me;
 	} ,
 	
 	/**
@@ -472,9 +515,12 @@ Ext.define ('Ext.ux.WebSocket', {
 	 * It sends event-driven messages to the server
 	 * @param {String/String[]} events Event(s) to send to the server
 	 * @param {String/Object} data Message to send to the server, associated to its event(s)
+     * @return {Ext.ux.WebSocket} The websocket
 	 * @private
 	 */
 	sendEventMessage: function (events, data) {
+        var me = this;
+
 		events = Ext.isString (events) ? [events] : events;
 		
 		for (var i=0; i<events.length; i++) {
@@ -482,22 +528,25 @@ Ext.define ('Ext.ux.WebSocket', {
 				event: events[i] ,
 				data: data
 			};
-			
-			this.ws.send (Ext.JSON.encode (msg));
+
+            me.safeSend (Ext.JSON.encode (msg));
 		}
 		
-		return this;
+		return me;
 	} ,
 	
 	/**
 	 * @method sendTextMessage
 	 * It sends pure text messages to the server
 	 * @param {String} event Message to send to the server
+     * @return {Ext.ux.WebSocket} The websocket
 	 * @private
 	 */
 	sendTextMessage: function (event) {
-		this.ws.send (event);
+        var me = this;
+
+        me.safeSend (event);
 		
-		return this;
+		return me;
 	}
 });
