@@ -17,7 +17,7 @@ $ bower install ext.ux.websocket
 
 Now, you got the extension at the following path: *YOUR_PROJECT_PATH/bower_components/ext.ux.websocket/*
 
-It contains **WebSocket.js** and **WebSocketManager.js** files and a minified version **WebSocket.min.js** adn **WebSocketManager.min.js**.
+It contains **WebSocket.js** and **WebSocketManager.js** files.
 
 Let's setup the **Ext.Loader** to require the right file:
 
@@ -26,9 +26,7 @@ Ext.Loader.setConfig ({
 	enabled: true ,
 	paths: {
 		'Ext.ux.WebSocket': 'bower_components/ext.ux.websocket/WebSocket.js' ,
-		// or the minified one: 'Ext.ux.WebSocket': 'bower_components/ext.ux.websocket/WebSocket.min.js' ,
 		'Ext.ux.WebSocketManager': 'bower_components/ext.ux.websocket/WebSocketManager.js'
-		// or the minified one: 'Ext.ux.WebSocketManager': 'bower_components/ext.ux.websocket/WebSocketManager.min.js'
 	}
 });
 
@@ -187,6 +185,63 @@ Ext.ux.WebSocketManager.unregister (ws1);
 Ext.ux.WebSocketManager.unregister (ws2);
 Ext.ux.WebSocketManager.unregister (ws3);
 ```
+
+## Cool Configurations
+Follows some cool configurations to customize `Ext.ux.WebSocket`
+
+### autoReconnect
+By default, `Ext.ux.WebSocket` tries to re-open the connection with an internal task if it gets closed: it tries every 5 seconds.
+Now, if you want to disable this behaviour, set autoReconnect to false:
+
+```javascript
+var websocket = Ext.create ('Ext.ux.WebSocket', {
+	url: 'ws://localhost:8888' ,
+	autoReconnect: false
+});
+```
+
+In this case, when the server listens again, the websocket won't estabilish the connection.
+Otherwise, if you want to change the reconnect timeslice, set autoReconnectionInterval in milliseconds:
+
+```javascript
+var websocket = Ext.create ('Ext.ux.WebSocket', {
+	url: 'ws://localhost:8888' ,
+	autoReconnect: true ,
+	autoReconnectInterval: 1000
+});
+```
+
+While in this case, the websocket tries to re-open the connection with the server every second.
+
+### lazyConnection
+Setting this config to true it will let the websocket to open the connection after its initialization:
+
+```javascript
+var websocket = Ext.create ('Ext.ux.WebSocket', {
+	url: 'ws://localhost:8888' ,
+	lazyConnection: true
+});
+
+// other stuff
+
+websocket.open ();
+```
+
+When the **open** method is called, the websocket open the connection with the server.
+By default, this config is set to **false**
+
+### keepUnsentMessages
+The connection gets closed by the server but the websocket still sends messages to it.
+By default, those messages are discarded but if you want to keep them and then send them back after the connection is re-estabilished, just set keepUnsentMessages to true:
+
+```javascript
+var websocket = Ext.create ('Ext.ux.WebSocket', {
+	url: 'ws://localhost:8888' ,
+	keepUnsentMessages: true
+});
+```
+
+The websocket will send every unsent messages in one shot.
 
 ## Run the demo
 First of all, you need [**NodeJS**](http://nodejs.org/) and [**NPM**](https://www.npmjs.org/).
