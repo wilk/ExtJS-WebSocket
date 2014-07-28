@@ -8,7 +8,7 @@ The second one is a singleton to register different Ext.ux.WebSocket and it prov
 
 ## ExtJS 5
 The new version of ExtJS 5 has requested to make a new major version of `ExtJS-WebSocket`.
-Now, this new major version (**v1.0.0**) is located on the master branch.
+Now, this new major version **v1.0.0** is located on the master branch.
 
 ## ExtJS 4 & Sencha Touch 2
 It's possible to work either with ExtJS 4 and Sencha Touch 2 with previous version **v0.0.5**
