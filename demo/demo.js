@@ -30,6 +30,7 @@ Ext.define ('DEMO.view.OpenConnection', {
 					var container = Ext.ComponentQuery.query('panel[title="' + url + '"] > container#messageCt')[0];
 					var messageBox = container.getEl().dom.getElementsByClassName("messageBox")[0];
 					messageBox.innerHTML += '> ' + data + '<br/>';
+					messageBox.scrollTop = messageBox.scrollHeight;
 				} ,
 				close: function (ws) {
 					var panel = Ext.ComponentQuery.query('panel[title="' + url + '"]')[0];
@@ -110,6 +111,7 @@ Ext.define ('DEMO.view.OpenConnection', {
 		xtype: 'textfield' ,
 		anchor: '100%' ,
 		fieldLabel: 'URL' ,
+		value: 'ws://localhost:9001' ,
 		labelAlign: 'top' ,
 		listeners: {
 			specialKey: function (tf, evt) {
