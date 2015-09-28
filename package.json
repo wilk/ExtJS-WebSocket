@@ -1,6 +1,6 @@
 {
   "name": "Ext.ux.WebSocket",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "description": "Ext.ux.WebSocket is an extension to manage HTML5 WebSocket with ExtJS and SenchaTouch",
   "main": "WebSocket.js",
   "scripts": {
