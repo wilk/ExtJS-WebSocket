@@ -195,6 +195,8 @@ Ext.define('Ext.ux.WebSocket', {
     constructor: function (cfg) {
         var me = this;
 
+	me.messageQueue = (cfg.messageQueue || []).slice();
+
         // Raises an error if no url is given
         if (Ext.isEmpty(cfg)) {
             Ext.Error.raise('URL for the websocket is required!');

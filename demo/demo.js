@@ -22,13 +22,18 @@ Ext.define ('DEMO.view.OpenConnection', {
 			url: url ,
 			listeners: {
 				open: function (ws) {
-					if (Ext.get(ws.url)) Ext.get(ws.url).dom.innerHTML += '> WebSocket just open!<br/>';
+					var container = Ext.ComponentQuery.query('panel[title="' + url + '"] > container#messageCt')[0];
+					var messageBox = container.getEl().dom.getElementsByClassName("messageBox")[0];
+					messageBox.innerHTML += '> WebSocket just open!<br/>';
 				} ,
 				message: function (ws, data) {
-					Ext.get(ws.url).dom.innerHTML += '> ' + data + '<br/>';
+					var container = Ext.ComponentQuery.query('panel[title="' + url + '"] > container#messageCt')[0];
+					var messageBox = container.getEl().dom.getElementsByClassName("messageBox")[0];
+					messageBox.innerHTML += '> ' + data + '<br/>';
+					messageBox.scrollTop = messageBox.scrollHeight;
 				} ,
 				close: function (ws) {
-					var panel = Ext.getCmp ('panel' + ws.url);
+					var panel = Ext.ComponentQuery.query('panel[title="' + url + '"]')[0];
 					
 					if ((panel != null) || (panel != undefined)) {
 						panel.destroy ();
@@ -41,7 +46,6 @@ Ext.define ('DEMO.view.OpenConnection', {
 		var panel = Ext.create ('Ext.panel.Panel', {
 			title: url ,
 			ws: ws ,
-			id: 'panel' + url ,
 			
 			layout: 'anchor' ,
 			
@@ -50,7 +54,8 @@ Ext.define ('DEMO.view.OpenConnection', {
 			
 			items: [{
 				xtype: 'container' ,
-				html: 'Incoming from the server:<br/><div id="' + url + '" style="height: 60px; border: black solid 1px; padding: 5px; margin: 5px 0 5px 0; overflow: auto"></div>'
+				html: 'Incoming from the server:<br/><div class="messageBox" style="height: 60px; border: black solid 1px; padding: 5px; margin: 5px 0 5px 0; overflow: auto"></div>' ,
+				itemId: 'messageCt'
 			} , {
 				xtype: 'textarea' ,
 				labelAlign: 'top' ,
@@ -106,6 +111,7 @@ Ext.define ('DEMO.view.OpenConnection', {
 		xtype: 'textfield' ,
 		anchor: '100%' ,
 		fieldLabel: 'URL' ,
+		value: 'ws://localhost:9001' ,
 		labelAlign: 'top' ,
 		listeners: {
 			specialKey: function (tf, evt) {
