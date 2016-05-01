@@ -10,10 +10,10 @@ The second one is a singleton to register different Ext.ux.WebSocket and it prov
 
 ## ExtJS 5
 The new version of ExtJS 5 has requested to make a new major version of `ExtJS-WebSocket`.
-Now, this new major version **v1.0.0** is located on the master branch.
+Now, this new major version **v1.0.1** is located on the master branch.
 
 ## ExtJS 4 & Sencha Touch 2
-It's possible to work either with ExtJS 4 and Sencha Touch 2 with previous version **v0.0.5**
+It's possible to work either with ExtJS 4 and Sencha Touch 2 with previous version **v0.0.6**
 
 ## Install via Bower
 First of all, install [**Bower**](http://bower.io/).
@@ -24,10 +24,10 @@ Then install `Ext.ux.WebSocket` (version v1.x.x for ExtJS 5):
 $ bower install ext.ux.websocket
 ```
 
-Or install `Ext.ux.WebSocket` (version v0.0.5 for ExtJS 4 & Sencha Touch 2):
+Or install `Ext.ux.WebSocket` (version v0.0.6 for ExtJS 4 & Sencha Touch 2):
 
 ```bash
-$ bower install ext.ux.websocket#0.0.5
+$ bower install ext.ux.websocket#0.0.6
 ```
 
 Now, you got the extension at the following path: *YOUR_PROJECT_PATH/bower_components/ext.ux.websocket/*
@@ -287,7 +287,7 @@ It will make the documentation into docs dir and it will be visible at: http://l
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2013 Vincenzo Ferrari <wilk3ert@gmail.com>
+Copyright (c) 2015 Vincenzo Ferrari <wilk3ert@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
