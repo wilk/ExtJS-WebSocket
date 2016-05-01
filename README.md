@@ -1,5 +1,7 @@
 # ExtJS-WebSocket
 
+# This library is no longer mainteined.
+
 ExtJS-WebSocket is an extension to handle and use the HTML5 WebSocket with ExtJS.
 
 It has two classes: `Ext.ux.WebSocket` and `Ext.ux.WebSocketManager`<br/>
